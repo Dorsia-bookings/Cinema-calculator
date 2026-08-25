@@ -26,6 +26,7 @@
       --grid-line: rgba(255,255,255,0.05);
       --r1-accent: #5b9bd5;
       --r2-accent: #c97ed4;
+      --tax-accent: #e8a838;
     }
 
     :root[data-theme="light"] {
@@ -46,6 +47,7 @@
       --grid-line: rgba(0,0,0,0.06);
       --r1-accent: #2a6db5;
       --r2-accent: #9b45a8;
+      --tax-accent: #b87d1a;
     }
 
     body {
@@ -78,15 +80,14 @@
     }
     .toggle-track.on .toggle-thumb { transform: translateX(18px); }
 
-    /* Room tabs */
     .room-tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
     .rtab {
       padding: 8px 20px; font-size: 13px; font-weight: 500; cursor: pointer;
       border: none; background: transparent; color: var(--text-mute);
       border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s;
     }
-    .rtab.r1.active { color: var(--r1-accent); border-bottom-color: var(--r1-accent); }
-    .rtab.r2.active { color: var(--r2-accent); border-bottom-color: var(--r2-accent); }
+    .rtab.r1.active     { color: var(--r1-accent); border-bottom-color: var(--r1-accent); }
+    .rtab.r2.active     { color: var(--r2-accent); border-bottom-color: var(--r2-accent); }
     .rtab.combined.active { color: var(--positive); border-bottom-color: var(--positive); }
     .rtab:hover { color: var(--text); }
 
@@ -100,8 +101,7 @@
 
     .room-badge {
       display: inline-block; font-size: 11px; font-weight: 600;
-      padding: 2px 8px; border-radius: 4px; margin-left: 8px;
-      vertical-align: middle;
+      padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle;
     }
     .badge-r1 { background: rgba(91,155,213,0.15); color: var(--r1-accent); }
     .badge-r2 { background: rgba(201,126,212,0.15); color: var(--r2-accent); }
@@ -131,17 +131,17 @@
     }
     .field input[type=number]:focus { outline: none; border-color: var(--text-mute); }
 
-    .bar-box {
+    .box {
       border: 1px solid var(--border2); border-radius: 10px;
-      padding: 1rem 1.25rem; background: var(--bg2); margin-bottom: 0.5rem;
+      padding: 1rem 1.25rem; background: var(--bg2); margin-bottom: 0.75rem;
     }
-    .bar-box .note { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+    .box .note { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
 
-    .costs-box {
-      border: 1px solid var(--border2); border-radius: 10px;
-      padding: 1rem 1.25rem; background: var(--bg2); margin-bottom: 0.5rem;
+    .tax-box {
+      border: 1px solid rgba(232,168,56,0.3);
+      border-radius: 10px; padding: 1rem 1.25rem;
+      background: var(--bg2); margin-top: 1rem;
     }
-    .costs-box .note { font-size: 11px; color: var(--text-dim); margin-top: 8px; }
 
     .result-card {
       border-radius: 10px; border: 1px solid var(--border);
@@ -150,18 +150,19 @@
 
     .metrics-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 1.5rem; }
     .metrics-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-    .metrics-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
 
     .metric { background: var(--bg3); border-radius: 8px; padding: 0.75rem 1rem; }
     .metric.accent-r1 { border-top: 2px solid var(--r1-accent); }
     .metric.accent-r2 { border-top: 2px solid var(--r2-accent); }
     .metric.accent-combined { border-top: 2px solid var(--positive); }
+    .metric.accent-tax { border-top: 2px solid var(--tax-accent); }
     .metric .label { font-size: 11px; color: var(--text-mute); margin-bottom: 4px; }
     .metric .value { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: var(--text-head); }
     .metric .sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
 
     .positive { color: var(--positive) !important; }
     .negative { color: var(--negative) !important; }
+    .tax-color { color: var(--tax-accent) !important; }
 
     .divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
 
@@ -169,30 +170,36 @@
     .row-line span:last-child { color: var(--text); font-weight: 500; }
     .row-line.hl { background: var(--bg3); border-radius: 6px; padding: 5px 8px; margin: 4px 0; }
     .row-line.hl span:first-child { color: var(--text); font-weight: 500; }
+    .row-line.tax-hl { background: rgba(232,168,56,0.08); border-radius: 6px; padding: 5px 8px; margin: 4px 0; border: 1px solid rgba(232,168,56,0.2); }
+    .row-line.tax-hl span:first-child { color: var(--tax-accent); font-weight: 500; }
+    .row-line.tax-hl span:last-child { color: var(--tax-accent); }
 
     .section-head { font-size: 12px; font-weight: 600; color: var(--text-mute); margin: 1rem 0 6px; }
-
-    .chart-wrap { position: relative; width: 100%; height: 220px; margin-top: 1.5rem; }
-
-    .be-note {
-      font-size: 12px; color: var(--text-mute); margin-top: 8px;
-      padding: 10px 14px; background: var(--bg2); border-radius: 6px; border: 1px solid var(--border);
-    }
+    .section-head.tax { color: var(--tax-accent); }
 
     .combined-summary {
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 1.5rem;
     }
-
-    .summary-block {
-      border-radius: 10px; padding: 1.25rem; border: 1px solid var(--border);
-    }
-    .summary-block.r1 { border-top: 3px solid var(--r1-accent); }
-    .summary-block.r2 { border-top: 3px solid var(--r2-accent); }
-    .summary-block.total { border-top: 3px solid var(--positive); background: var(--bg2); }
-
+    .summary-block { border-radius: 10px; padding: 1.25rem; border: 1px solid var(--border); }
+    .summary-block.r1     { border-top: 3px solid var(--r1-accent); }
+    .summary-block.r2     { border-top: 3px solid var(--r2-accent); }
+    .summary-block.total  { border-top: 3px solid var(--positive); background: var(--bg2); }
     .summary-block .room-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-mute); margin-bottom: 10px; }
     .summary-block .big-num { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; }
     .summary-block .sub-line { font-size: 12px; color: var(--text-mute); margin-top: 4px; }
+
+    .tax-summary {
+      background: rgba(232,168,56,0.06);
+      border: 1px solid rgba(232,168,56,0.25);
+      border-radius: 10px; padding: 1.25rem; margin-top: 1rem;
+    }
+    .tax-summary h3 { font-size: 13px; font-weight: 600; color: var(--tax-accent); margin-bottom: 1rem; }
+
+    .chart-wrap { position: relative; width: 100%; height: 220px; margin-top: 1.5rem; }
+    .be-note {
+      font-size: 12px; color: var(--text-mute); margin-top: 8px;
+      padding: 10px 14px; background: var(--bg2); border-radius: 6px; border: 1px solid var(--border);
+    }
 
     footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dim); }
 
@@ -222,9 +229,8 @@
     </div>
   </header>
 
-  <!-- Shared costs live here, referenced by all panels -->
   <div class="section-label">Shared monthly costs (both rooms)</div>
-  <div class="costs-box">
+  <div class="box">
     <div class="grid-4">
       <div class="field"><label>Rent/wk ($) x4</label><input type="number" id="rent_wk" value="1350" oninput="calcAll()"></div>
       <div class="field"><label>Outgoings/yr ($) ÷12</label><input type="number" id="outgoings_yr" value="13600" oninput="calcAll()"></div>
@@ -234,7 +240,6 @@
     <p class="note">Rent and outgoings are shared across both rooms. Film rights and bar stock are modelled per-room below.</p>
   </div>
 
-  <!-- Room tabs -->
   <div class="room-tabs" style="margin-top:1.5rem">
     <button class="rtab r1 active" onclick="switchTab('r1')">Room 1 — Public screenings</button>
     <button class="rtab r2" onclick="switchTab('r2')">Room 2 — Private hire</button>
@@ -243,7 +248,6 @@
 
   <!-- ROOM 1 -->
   <div class="panel active" id="panel-r1">
-
     <div class="section-label">Quick scenario <span class="room-badge badge-r1">Room 1</span></div>
     <div class="scenario-tabs">
       <button class="stab r1-stab" onclick="setScenarioR1('quiet')">Quiet start</button>
@@ -277,7 +281,7 @@
     </div>
 
     <div class="section-label">Bar &amp; food <span class="room-badge badge-r1">Room 1</span></div>
-    <div class="bar-box">
+    <div class="box">
       <div class="slider-row" style="margin-bottom:12px">
         <label>Avg spend per customer ($)</label>
         <input type="range" id="r1_barspend" min="0" max="40" step="0.5" value="15" oninput="calcAll()">
@@ -307,7 +311,7 @@
         <div class="metric accent-r1"><div class="label">Ticket revenue</div><div class="value" id="r1-tickrev">$0</div></div>
         <div class="metric accent-r1"><div class="label">Bar net</div><div class="value" id="r1-barnet">$0</div><div class="sub" id="r1-bargross"></div></div>
         <div class="metric accent-r1"><div class="label">Film rights</div><div class="value" id="r1-rights-total">$0</div></div>
-        <div class="metric accent-r1"><div class="label">Room 1 net</div><div class="value" id="r1-net">$0</div><div class="sub" id="r1-annual"></div></div>
+        <div class="metric accent-r1"><div class="label">Room 1 contribution</div><div class="value" id="r1-net">$0</div><div class="sub" id="r1-annual"></div></div>
       </div>
 
       <div class="section-head">Revenue</div>
@@ -319,7 +323,6 @@
       <div class="row-line"><span>Bar COGS (<span id="r1l-cogspct"></span>)</span><span id="r1b-cogs"></span></div>
       <div class="row-line hl"><span>Bar net</span><span id="r1b-barnet"></span></div>
       <div class="row-line hl"><span>Total net revenue (Room 1)</span><span id="r1b-totalrev"></span></div>
-
       <hr class="divider">
       <div class="section-head">Room 1 direct costs</div>
       <div class="row-line"><span>Film rights (<span id="r1l-films"></span> titles x <span id="r1l-rightsfee"></span>)</span><span id="r1b-rights"></span></div>
@@ -335,9 +338,9 @@
 
     <div class="section-label">Private hire bookings <span class="room-badge badge-r2">Room 2</span></div>
     <div class="slider-row">
-      <label>Private bookings per week</label>
-      <input type="range" id="r2_bookings" min="0" max="14" step="1" value="3" oninput="calcAll()">
-      <span class="val" id="r2_bookings-v">3</span><span class="cap">/ wk</span>
+      <label>Private bookings per month</label>
+      <input type="range" id="r2_bookings" min="0" max="60" step="1" value="12" oninput="calcAll()">
+      <span class="val" id="r2_bookings-v">12</span><span class="cap">/ mo</span>
     </div>
     <div class="slider-row">
       <label>Hire fee per booking ($)</label>
@@ -351,7 +354,7 @@
     </div>
 
     <div class="section-label">Bar &amp; food — private hire <span class="room-badge badge-r2">Room 2</span></div>
-    <div class="bar-box">
+    <div class="box">
       <div class="slider-row" style="margin-bottom:12px">
         <label>Avg spend per person ($)</label>
         <input type="range" id="r2_barspend" min="0" max="60" step="1" value="25" oninput="calcAll()">
@@ -367,14 +370,14 @@
         <input type="range" id="r2_barcogs" min="10" max="60" step="5" value="30" oninput="calcAll()">
         <span class="val" id="r2_barcogs-v">30%</span>
       </div>
-      <p class="note">Private groups typically spend more per head — birthdays, hens nights, corporate. 85% purchase rate and $25 avg is conservative.</p>
+      <p class="note">Private groups typically spend more per head. 85% purchase rate and $25 avg is conservative for birthdays and hens nights.</p>
     </div>
 
     <div class="section-label">Overflow public screenings (when Room 2 not hired) <span class="room-badge badge-r2">Room 2</span></div>
     <div class="slider-row">
-      <label>Overflow sessions per week</label>
-      <input type="range" id="r2_overflow_sess" min="0" max="11" step="1" value="2" oninput="calcAll()">
-      <span class="val" id="r2_overflow_sess-v">2</span><span class="cap">/ wk</span>
+      <label>Overflow sessions per month</label>
+      <input type="range" id="r2_overflow_sess" min="0" max="44" step="1" value="8" oninput="calcAll()">
+      <span class="val" id="r2_overflow_sess-v">8</span><span class="cap">/ mo</span>
     </div>
     <div class="slider-row">
       <label>Avg occupancy (seats)</label>
@@ -387,7 +390,7 @@
       <span class="val" id="r2_overflow_tp-v">$16.50</span>
     </div>
 
-    <div class="section-label">Film rights — Room 2 <span class="room-badge badge-r2">Room 2</span></div>
+    <div class="section-label">Film rights — Room 2 overflow <span class="room-badge badge-r2">Room 2</span></div>
     <div class="grid-2">
       <div class="field"><label>Rights per overflow title ($)</label><input type="number" id="r2_rights" value="220" oninput="calcAll()"></div>
       <div class="field"><label>Overflow titles per month</label><input type="number" id="r2_numfilms" value="4" oninput="calcAll()"></div>
@@ -398,7 +401,7 @@
       <div class="metrics-4">
         <div class="metric accent-r2"><div class="label">Private bookings/mo</div><div class="value" id="r2-bookings">0</div><div class="sub" id="r2-booksub"></div></div>
         <div class="metric accent-r2"><div class="label">Hire fee revenue</div><div class="value" id="r2-hiretotal">$0</div></div>
-        <div class="metric accent-r2"><div class="label">Bar net (hire + overflow)</div><div class="value" id="r2-barnet">$0</div></div>
+        <div class="metric accent-r2"><div class="label">Bar net (hire)</div><div class="value" id="r2-barnet">$0</div></div>
         <div class="metric accent-r2"><div class="label">Room 2 contribution</div><div class="value" id="r2-net">$0</div><div class="sub" id="r2-annual"></div></div>
       </div>
 
@@ -453,11 +456,10 @@
 
     <div class="result-card">
       <div class="section-head">Full monthly P&amp;L</div>
-
-      <div class="row-line" style="margin-top:4px"><span>Room 1 ticket revenue</span><span id="cb-r1-tickrev"></span></div>
+      <div class="row-line"><span>Room 1 ticket revenue</span><span id="cb-r1-tickrev"></span></div>
       <div class="row-line"><span>Room 1 bar net</span><span id="cb-r1-barnet"></span></div>
       <div class="row-line"><span>Room 2 hire fees</span><span id="cb-r2-hire"></span></div>
-      <div class="row-line"><span>Room 2 bar net (hire + overflow)</span><span id="cb-r2-barnet"></span></div>
+      <div class="row-line"><span>Room 2 bar net (hire)</span><span id="cb-r2-barnet"></span></div>
       <div class="row-line"><span>Room 2 overflow ticket revenue</span><span id="cb-r2-overflow-tick"></span></div>
       <div class="row-line hl"><span>Total gross revenue</span><span id="cb-gross"></span></div>
 
@@ -472,7 +474,7 @@
       <div class="row-line hl"><span>Total costs</span><span id="cb-totalcosts"></span></div>
 
       <hr class="divider">
-      <div class="row-line" style="font-size:15px;font-weight:600;color:var(--text-head)"><span>Net monthly</span><span id="cb-net"></span></div>
+      <div class="row-line" style="font-size:15px;font-weight:600;color:var(--text-head)"><span>Net monthly (before tax)</span><span id="cb-net"></span></div>
       <div class="row-line"><span>Annualised (x12, before tax)</span><span id="cb-annual"></span></div>
 
       <hr class="divider">
@@ -481,6 +483,46 @@
       <div class="row-line"><span>Room 2 hire contribution covers</span><span id="cb-r2-covers"></span></div>
       <div class="row-line"><span>Remaining to cover from Room 1</span><span id="cb-r1-needed"></span></div>
       <div class="row-line"><span>Room 1 tickets needed to cover remainder</span><span id="cb-r1-tickets-needed"></span></div>
+
+      <!-- TAX SECTION -->
+      <hr class="divider">
+      <div class="section-head tax">Australian tax estimates</div>
+
+      <div class="tax-summary">
+        <h3>How business tax works in Australia</h3>
+        <div class="row-line"><span>Business structure assumed</span><span id="t-structure">Sole trader / small company</span></div>
+        <div class="row-line"><span>Annual net profit (before tax)</span><span id="t-annual-profit"></span></div>
+
+        <hr class="divider">
+        <div class="section-head tax">GST (Goods &amp; Services Tax)</div>
+        <div class="row-line"><span>GST on ticket sales (10% collected)</span><span id="t-gst-tickets"></span></div>
+        <div class="row-line"><span>GST on bar / hire revenue (10%)</span><span id="t-gst-bar"></span></div>
+        <div class="row-line"><span>GST on rent &amp; outgoings (input credit)</span><span id="t-gst-rent-credit"></span></div>
+        <div class="row-line tax-hl"><span>Estimated net GST payable / quarter</span><span id="t-gst-net"></span></div>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:6px">GST collected on revenue minus GST credits on business expenses. Lodged quarterly via BAS. Once registered for GST your prices are effectively GST-inclusive — the 10% belongs to the ATO, not you.</p>
+
+        <hr class="divider">
+        <div class="section-head tax">Income tax (profit after expenses)</div>
+        <div class="row-line"><span>Small company tax rate (base rate entity)</span><span>25%</span></div>
+        <div class="row-line"><span>Sole trader rate at this income (est.)</span><span id="t-sole-rate"></span></div>
+        <div class="row-line"><span>Annual taxable profit</span><span id="t-taxable"></span></div>
+        <div class="row-line tax-hl"><span>Estimated annual income tax (company rate 25%)</span><span id="t-company-tax"></span></div>
+        <div class="row-line tax-hl"><span>Estimated annual income tax (sole trader)</span><span id="t-sole-tax"></span></div>
+        <div class="row-line"><span>After-tax annual profit (company)</span><span id="t-after-company"></span></div>
+        <div class="row-line"><span>After-tax annual profit (sole trader)</span><span id="t-after-sole"></span></div>
+        <div class="row-line"><span>After-tax monthly take-home (company)</span><span id="t-monthly-company"></span></div>
+        <div class="row-line"><span>After-tax monthly take-home (sole trader)</span><span id="t-monthly-sole"></span></div>
+
+        <hr class="divider">
+        <div class="section-head tax">Other obligations to be aware of</div>
+        <div style="font-size:12px;color:var(--text-mute);line-height:1.8">
+          <div><strong style="color:var(--text)">Superannuation:</strong> If you pay staff or pay yourself a wage, 11.5% super applies on top (2024–25 rate).</div>
+          <div style="margin-top:6px"><strong style="color:var(--text)">Payroll tax (Tasmania):</strong> Only applies if your total wages exceed $1.25M/year — unlikely at this scale.</div>
+          <div style="margin-top:6px"><strong style="color:var(--text)">Liquor licence:</strong> Annual fee varies by licence type in Tasmania. Budget $500–$2,000/year. Apply through CBOS.</div>
+          <div style="margin-top:6px"><strong style="color:var(--text)">BAS lodgement:</strong> Quarterly. Register for GST once turnover exceeds $75,000/year — at these revenue levels you will exceed that threshold.</div>
+          <div style="margin-top:6px"><strong style="color:var(--text)">PAYG instalments:</strong> Once profitable, the ATO will require quarterly income tax prepayments. Factor this into cash flow.</div>
+        </div>
+      </div>
     </div>
 
     <div class="chart-wrap"><canvas id="combinedChart"></canvas></div>
@@ -488,13 +530,13 @@
   </div>
 
   <footer>
-    <p>Built for planning purposes only. All figures are estimates. 4 weeks/month used throughout. Rent ex-GST — add 10% for actual outflow. Film rights depend on distributor agreements. Labour at $0 assumes owner-operated.</p>
+    <p>Built for planning purposes only. All figures are estimates. Tax calculations are indicative only — consult an accountant for your specific structure and situation. 4 weeks/month used throughout. Rent ex-GST — add 10% for actual cash outflow.</p>
   </footer>
 
 </div>
 <script>
   const WPM = 4;
-  const SEATS_R1 = 50, SEATS_R2 = 50;
+  const SEATS_R1 = 50;
   const SESS_WKN = 3, SESS_FRI = 2, SESS_WKD = 6, TOTAL_SESS_WK = 11;
   const TOTAL_SESS_MO = TOTAL_SESS_WK * WPM; // 44
   const CAP_R1 = SEATS_R1 * TOTAL_SESS_MO;   // 2200
@@ -548,7 +590,7 @@
 
   function getR2() {
     return {
-      bookings_wk:  parseInt(document.getElementById('r2_bookings').value),
+      bookings_mo:  parseInt(document.getElementById('r2_bookings').value),
       hirefee:      parseFloat(document.getElementById('r2_hirefee').value)       || 0,
       groupsize:    parseInt(document.getElementById('r2_groupsize').value),
       barspend:     parseFloat(document.getElementById('r2_barspend').value)      || 0,
@@ -580,45 +622,58 @@
   }
 
   function computeR2(r2) {
-    const bookings_mo = r2.bookings_wk * WPM;
-    const hire_total  = bookings_mo * r2.hirefee;
-    const hire_buyers = Math.round(bookings_mo * r2.groupsize * r2.barpct);
+    const hire_total     = r2.bookings_mo * r2.hirefee;
+    const hire_buyers    = Math.round(r2.bookings_mo * r2.groupsize * r2.barpct);
     const hire_bar_gross = hire_buyers * r2.barspend;
     const hire_bar_cogs  = hire_bar_gross * r2.barcogs;
     const hire_bar_net   = hire_bar_gross - hire_bar_cogs;
     const hire_net_rev   = hire_total + hire_bar_net;
 
-    const overflow_sess_mo = r2.overflow_sess * WPM;
-    const overflow_tickets = overflow_sess_mo * r2.overflow_occ;
+    const overflow_tickets = r2.overflow_sess * r2.overflow_occ;
     const overflow_tickrev = overflow_tickets * r2.overflow_tp;
     const overflow_rights  = r2.rights * r2.numfilms;
     const overflow_net     = overflow_tickrev - overflow_rights;
+    const contribution     = hire_net_rev + overflow_net;
 
-    const total_bar_net = hire_bar_net; // overflow bar not separately modelled for simplicity
-    const contribution  = hire_net_rev + overflow_net;
+    return { hire_total, hire_buyers, hire_bar_gross, hire_bar_cogs, hire_bar_net, hire_net_rev, overflow_tickets, overflow_tickrev, overflow_rights, overflow_net, contribution };
+  }
 
-    return { bookings_mo, hire_total, hire_buyers, hire_bar_gross, hire_bar_cogs, hire_bar_net, hire_net_rev, overflow_sess_mo, overflow_tickets, overflow_tickrev, overflow_rights, overflow_net, total_bar_net, contribution };
+  // Australian income tax estimate (2024-25 rates, sole trader)
+  function calcSoleTax(annualProfit) {
+    if (annualProfit <= 18200) return 0;
+    if (annualProfit <= 45000) return (annualProfit - 18200) * 0.19;
+    if (annualProfit <= 120000) return 5092 + (annualProfit - 45000) * 0.325;
+    if (annualProfit <= 180000) return 29467 + (annualProfit - 120000) * 0.37;
+    return 51667 + (annualProfit - 180000) * 0.45;
+  }
+
+  function soleTraderRate(annualProfit) {
+    if (annualProfit <= 18200) return '0% (tax-free threshold)';
+    if (annualProfit <= 45000) return '19% marginal';
+    if (annualProfit <= 120000) return '32.5% marginal';
+    if (annualProfit <= 180000) return '37% marginal';
+    return '45% marginal';
   }
 
   function calcAll() {
-    const s  = getShared();
+    const s   = getShared();
     const r1i = getR1();
     const r2i = getR2();
-    const r1 = computeR1(r1i);
-    const r2 = computeR2(r2i);
+    const r1  = computeR1(r1i);
+    const r2  = computeR2(r2i);
 
     const shared_costs = s.rent_wk * WPM + s.outgoings_yr / 12 + s.inet + s.labour;
     const total_costs  = shared_costs + r1.rights_cost + r2.overflow_rights;
     const total_rev    = r1.total_rev + r2.hire_total + r2.hire_bar_net + r2.overflow_tickrev;
-    const net          = total_rev - total_costs;
+    const net_monthly  = total_rev - total_costs;
+    const net_annual   = net_monthly * 12;
 
-    updateR1UI(r1i, r1);
+    updateR1UI(r1i, r1, shared_costs);
     updateR2UI(r2i, r2);
-    updateCombinedUI(s, r1i, r1, r2i, r2, shared_costs, total_costs, total_rev, net);
+    updateCombinedUI(s, r1i, r1, r2i, r2, shared_costs, total_costs, total_rev, net_monthly, net_annual);
   }
 
-  function updateR1UI(i, r) {
-    // sliders
+  function updateR1UI(i, r, shared_costs) {
     document.getElementById('r1_wknight-v').textContent = i.wkn;
     document.getElementById('r1_fri-v').textContent     = i.fri;
     document.getElementById('r1_wkend-v').textContent   = i.wkd;
@@ -656,42 +711,36 @@
     cogsEl.textContent = '-' + fmt(r.bar_cogs);
     cogsEl.style.color = isDark ? '#e05c5c' : '#c0392b';
 
-    document.getElementById('r1b-barnet').textContent  = fmt(r.bar_net);
-    document.getElementById('r1b-totalrev').textContent= fmt(r.total_rev);
-    document.getElementById('r1l-films').textContent   = i.numfilms;
-    document.getElementById('r1l-rightsfee').textContent = '$' + i.rights;
-    document.getElementById('r1b-rights').textContent  = fmt(r.rights_cost);
+    document.getElementById('r1b-barnet').textContent   = fmt(r.bar_net);
+    document.getElementById('r1b-totalrev').textContent = fmt(r.total_rev);
+    document.getElementById('r1l-films').textContent    = i.numfilms;
+    document.getElementById('r1l-rightsfee').textContent= '$' + i.rights;
+    document.getElementById('r1b-rights').textContent   = fmt(r.rights_cost);
+    document.getElementById('r1b-contribution').textContent = fmt(r.contribution);
 
-    const contribEl = document.getElementById('r1b-contribution');
-    contribEl.textContent = fmt(r.contribution);
-    contribEl.className = 'row-line hl';
+    updateR1Chart(i, shared_costs);
 
-    // chart
-    updateR1Chart(i, r);
-
-    const s = getShared();
-    const shared = s.rent_wk * WPM + s.outgoings_yr / 12 + s.inet + s.labour;
     const eff = i.tp + i.barspend * i.barpct * (1 - i.barcogs);
-    const be  = (shared + r.rights_cost) / eff;
+    const be  = (shared_costs + r.rights_cost) / eff;
     document.getElementById('r1-be-line').textContent =
       'Room 1 effective revenue per customer: $' + eff.toFixed(2) +
       '. Needs ~' + Math.ceil(be).toLocaleString() + ' tickets/month (' +
-      Math.round(be / CAP_R1 * 100) + '% of ' + CAP_R1.toLocaleString() + ' capacity) to cover all costs alone. Room 2 hire income reduces this significantly — see Combined tab.';
+      Math.round(be / CAP_R1 * 100) + '% of ' + CAP_R1.toLocaleString() + ' capacity) to cover all costs alone. Room 2 income reduces this — see Combined tab.';
   }
 
   function updateR2UI(i, r) {
-    document.getElementById('r2_bookings-v').textContent     = i.bookings_wk;
-    document.getElementById('r2_hirefee-v').textContent      = '$' + i.hirefee;
-    document.getElementById('r2_groupsize-v').textContent    = i.groupsize;
-    document.getElementById('r2_bar-v').textContent          = '$' + i.barspend;
-    document.getElementById('r2_barpct-v').textContent       = Math.round(i.barpct  * 100) + '%';
-    document.getElementById('r2_barcogs-v').textContent      = Math.round(i.barcogs * 100) + '%';
-    document.getElementById('r2_overflow_sess-v').textContent= i.overflow_sess;
-    document.getElementById('r2_overflow_occ-v').textContent = i.overflow_occ;
-    document.getElementById('r2_overflow_tp-v').textContent  = '$' + i.overflow_tp.toFixed(2);
+    document.getElementById('r2_bookings-v').textContent      = i.bookings_mo;
+    document.getElementById('r2_hirefee-v').textContent       = '$' + i.hirefee;
+    document.getElementById('r2_groupsize-v').textContent     = i.groupsize;
+    document.getElementById('r2_bar-v').textContent           = '$' + i.barspend;
+    document.getElementById('r2_barpct-v').textContent        = Math.round(i.barpct  * 100) + '%';
+    document.getElementById('r2_barcogs-v').textContent       = Math.round(i.barcogs * 100) + '%';
+    document.getElementById('r2_overflow_sess-v').textContent = i.overflow_sess;
+    document.getElementById('r2_overflow_occ-v').textContent  = i.overflow_occ;
+    document.getElementById('r2_overflow_tp-v').textContent   = '$' + i.overflow_tp.toFixed(2);
 
-    document.getElementById('r2-bookings').textContent  = r.bookings_mo;
-    document.getElementById('r2-booksub').textContent   = i.bookings_wk + ' / wk';
+    document.getElementById('r2-bookings').textContent  = i.bookings_mo;
+    document.getElementById('r2-booksub').textContent   = 'per month';
     document.getElementById('r2-hiretotal').textContent = fmt(r.hire_total);
     document.getElementById('r2-barnet').textContent    = fmt(r.hire_bar_net);
 
@@ -700,30 +749,29 @@
     netEl.className = 'value ' + clr(r.contribution);
     document.getElementById('r2-annual').textContent = fmt(r.contribution * 12) + ' / yr';
 
-    document.getElementById('r2l-bookings').textContent    = r.bookings_mo;
-    document.getElementById('r2l-hirefee').textContent     = fmt(i.hirefee);
-    document.getElementById('r2b-hiretotal').textContent   = fmt(r.hire_total);
-    document.getElementById('r2l-hirebuyers').textContent  = r.hire_buyers;
-    document.getElementById('r2l-hirespend').textContent   = '$' + i.barspend;
-    document.getElementById('r2b-hire-bargross').textContent = fmt(r.hire_bar_gross);
+    document.getElementById('r2l-bookings').textContent     = i.bookings_mo;
+    document.getElementById('r2l-hirefee').textContent      = fmt(i.hirefee);
+    document.getElementById('r2b-hiretotal').textContent    = fmt(r.hire_total);
+    document.getElementById('r2l-hirebuyers').textContent   = r.hire_buyers;
+    document.getElementById('r2l-hirespend').textContent    = '$' + i.barspend;
+    document.getElementById('r2b-hire-bargross').textContent= fmt(r.hire_bar_gross);
 
     const hcogs = document.getElementById('r2b-hire-cogs');
     hcogs.textContent = '-' + fmt(r.hire_bar_cogs);
     hcogs.style.color = isDark ? '#e05c5c' : '#c0392b';
 
-    document.getElementById('r2b-hire-net').textContent       = fmt(r.hire_net_rev);
-    document.getElementById('r2l-overflow-sess').textContent  = r.overflow_sess_mo;
-    document.getElementById('r2l-overflow-occ').textContent   = i.overflow_occ;
+    document.getElementById('r2b-hire-net').textContent         = fmt(r.hire_net_rev);
+    document.getElementById('r2l-overflow-sess').textContent    = i.overflow_sess;
+    document.getElementById('r2l-overflow-occ').textContent     = i.overflow_occ;
     document.getElementById('r2b-overflow-tickrev').textContent = fmt(r.overflow_tickrev);
-    document.getElementById('r2l-films').textContent          = i.numfilms;
-    document.getElementById('r2l-rightsfee').textContent      = '$' + i.rights;
-    document.getElementById('r2b-rights').textContent         = fmt(r.overflow_rights);
-    document.getElementById('r2b-overflow-net').textContent   = fmt(r.overflow_net);
-    document.getElementById('r2b-contribution').textContent   = fmt(r.contribution);
+    document.getElementById('r2l-films').textContent            = i.numfilms;
+    document.getElementById('r2l-rightsfee').textContent        = '$' + i.rights;
+    document.getElementById('r2b-rights').textContent           = fmt(r.overflow_rights);
+    document.getElementById('r2b-overflow-net').textContent     = fmt(r.overflow_net);
+    document.getElementById('r2b-contribution').textContent     = fmt(r.contribution);
   }
 
-  function updateCombinedUI(s, r1i, r1, r2i, r2, shared_costs, total_costs, total_rev, net) {
-    // summary blocks
+  function updateCombinedUI(s, r1i, r1, r2i, r2, shared_costs, total_costs, total_rev, net_monthly, net_annual) {
     const r1ContribEl = document.getElementById('c-r1-contrib');
     r1ContribEl.textContent = fmt(r1.contribution);
     r1ContribEl.className   = 'big-num ' + clr(r1.contribution);
@@ -733,15 +781,15 @@
     r2ContribEl.className   = 'big-num ' + clr(r2.contribution);
 
     const netEl = document.getElementById('c-net');
-    netEl.textContent = fmt(net);
-    netEl.className   = 'big-num ' + clr(net);
-    document.getElementById('c-net-annual').textContent = fmt(net * 12) + ' / yr';
+    netEl.textContent = fmt(net_monthly);
+    netEl.className   = 'big-num ' + clr(net_monthly);
+    document.getElementById('c-net-annual').textContent = fmt(net_annual) + ' / yr before tax';
 
     document.getElementById('c-r1-tickets').textContent = r1.total_tickets.toLocaleString();
     document.getElementById('c-r1-tickrev').textContent = fmt(r1.ticket_rev);
     document.getElementById('c-r1-barnet').textContent  = fmt(r1.bar_net);
     document.getElementById('c-r1-rights').textContent  = fmt(r1.rights_cost);
-    document.getElementById('c-r2-bookings').textContent= r2.bookings_mo;
+    document.getElementById('c-r2-bookings').textContent= r2i.bookings_mo;
     document.getElementById('c-r2-hire').textContent    = fmt(r2.hire_total);
     document.getElementById('c-r2-barnet').textContent  = fmt(r2.hire_bar_net);
     document.getElementById('c-r2-overflow').textContent= fmt(r2.overflow_net);
@@ -749,44 +797,69 @@
     document.getElementById('c-shared').textContent     = fmt(shared_costs);
     document.getElementById('c-roomcosts').textContent  = fmt(r1.rights_cost + r2.overflow_rights);
 
-    // P&L table
-    document.getElementById('cb-r1-tickrev').textContent = fmt(r1.ticket_rev);
-    document.getElementById('cb-r1-barnet').textContent  = fmt(r1.bar_net);
-    document.getElementById('cb-r2-hire').textContent    = fmt(r2.hire_total);
-    document.getElementById('cb-r2-barnet').textContent  = fmt(r2.hire_bar_net);
-    document.getElementById('cb-r2-overflow-tick').textContent = fmt(r2.overflow_tickrev);
-    document.getElementById('cb-gross').textContent      = fmt(total_rev);
-    document.getElementById('cb-rent-wk').textContent    = fmt(s.rent_wk);
-    document.getElementById('cb-rent').textContent       = fmt(s.rent_wk * WPM);
-    document.getElementById('cb-outgoings-yr').textContent = fmt(s.outgoings_yr);
-    document.getElementById('cb-outgoings').textContent  = fmt(s.outgoings_yr / 12);
-    document.getElementById('cb-inet').textContent       = fmt(s.inet);
-    document.getElementById('cb-labour').textContent     = fmt(s.labour);
-    document.getElementById('cb-r1-rights').textContent  = fmt(r1.rights_cost);
-    document.getElementById('cb-r2-rights').textContent  = fmt(r2.overflow_rights);
-    document.getElementById('cb-totalcosts').textContent = fmt(total_costs);
+    document.getElementById('cb-r1-tickrev').textContent      = fmt(r1.ticket_rev);
+    document.getElementById('cb-r1-barnet').textContent       = fmt(r1.bar_net);
+    document.getElementById('cb-r2-hire').textContent         = fmt(r2.hire_total);
+    document.getElementById('cb-r2-barnet').textContent       = fmt(r2.hire_bar_net);
+    document.getElementById('cb-r2-overflow-tick').textContent= fmt(r2.overflow_tickrev);
+    document.getElementById('cb-gross').textContent           = fmt(total_rev);
+    document.getElementById('cb-rent-wk').textContent         = fmt(s.rent_wk);
+    document.getElementById('cb-rent').textContent            = fmt(s.rent_wk * WPM);
+    document.getElementById('cb-outgoings-yr').textContent    = fmt(s.outgoings_yr);
+    document.getElementById('cb-outgoings').textContent       = fmt(s.outgoings_yr / 12);
+    document.getElementById('cb-inet').textContent            = fmt(s.inet);
+    document.getElementById('cb-labour').textContent          = fmt(s.labour);
+    document.getElementById('cb-r1-rights').textContent       = fmt(r1.rights_cost);
+    document.getElementById('cb-r2-rights').textContent       = fmt(r2.overflow_rights);
+    document.getElementById('cb-totalcosts').textContent      = fmt(total_costs);
 
     const cbNet = document.getElementById('cb-net');
-    cbNet.textContent = fmt(net);
-    cbNet.className = clr(net);
-    document.getElementById('cb-annual').textContent = fmt(net * 12);
+    cbNet.textContent = fmt(net_monthly);
+    cbNet.className = clr(net_monthly);
+    document.getElementById('cb-annual').textContent = fmt(net_annual);
 
-    // break-even analysis
-    document.getElementById('cb-be-costs').textContent = fmt(total_costs);
-    document.getElementById('cb-r2-covers').textContent = fmt(r2.contribution) + ' (' + Math.round(r2.contribution / total_costs * 100) + '% of costs)';
+    const eff = r1i.tp + r1i.barspend * r1i.barpct * (1 - r1i.barcogs);
+    const be  = Math.max(0, total_costs - r2.contribution) / eff;
+    document.getElementById('cb-be-costs').textContent         = fmt(total_costs);
+    document.getElementById('cb-r2-covers').textContent        = fmt(r2.contribution) + ' (' + Math.round(r2.contribution / total_costs * 100) + '% of costs)';
     const remainder = total_costs - r2.contribution;
     const remEl = document.getElementById('cb-r1-needed');
     remEl.textContent = fmt(Math.max(0, remainder));
     remEl.className = remainder > 0 ? 'negative' : 'positive';
-    const eff = r1i.tp + r1i.barspend * r1i.barpct * (1 - r1i.barcogs);
-    const be_r1 = Math.max(0, remainder) / eff;
     document.getElementById('cb-r1-tickets-needed').textContent =
-      Math.ceil(be_r1).toLocaleString() + ' tickets (' + Math.round(be_r1 / CAP_R1 * 100) + '% of Room 1 capacity)';
+      Math.ceil(be).toLocaleString() + ' tickets (' + Math.round(be / CAP_R1 * 100) + '% of Room 1 capacity)';
+
+    // TAX
+    const annual = net_annual;
+    const company_tax = annual * 0.25;
+    const sole_tax    = calcSoleTax(annual);
+    const after_company = annual - company_tax;
+    const after_sole    = annual - sole_tax;
+
+    // GST estimates (monthly → quarterly x3)
+    const gst_tickets = r1.ticket_rev * 0.10 * 3;
+    const gst_bar     = (r1.bar_gross + r2.hire_bar_gross + r2.overflow_tickrev) * 0.10 * 3;
+    const gst_rent_credit = (s.rent_wk * WPM * 0.10 + s.outgoings_yr / 12 * 0.10) * 3;
+    const gst_net = gst_tickets + gst_bar - gst_rent_credit;
+
+    document.getElementById('t-annual-profit').textContent   = fmt(annual);
+    document.getElementById('t-gst-tickets').textContent     = fmt(gst_tickets) + ' / qtr';
+    document.getElementById('t-gst-bar').textContent         = fmt(gst_bar) + ' / qtr';
+    document.getElementById('t-gst-rent-credit').textContent = '-' + fmt(gst_rent_credit) + ' / qtr credit';
+    document.getElementById('t-gst-net').textContent         = fmt(Math.max(0, gst_net)) + ' / qtr';
+    document.getElementById('t-sole-rate').textContent       = soleTraderRate(annual);
+    document.getElementById('t-taxable').textContent         = fmt(annual);
+    document.getElementById('t-company-tax').textContent     = fmt(company_tax);
+    document.getElementById('t-sole-tax').textContent        = fmt(sole_tax);
+    document.getElementById('t-after-company').textContent   = fmt(after_company);
+    document.getElementById('t-after-sole').textContent      = fmt(after_sole);
+    document.getElementById('t-monthly-company').textContent = fmt(after_company / 12);
+    document.getElementById('t-monthly-sole').textContent    = fmt(after_sole / 12);
 
     document.getElementById('combined-be-line').textContent =
       'Room 2 private hire covers ' + Math.round(r2.contribution / total_costs * 100) + '% of total costs. ' +
-      'Room 1 needs to bring in ' + fmt(Math.max(0, remainder)) + ' more to break even — roughly ' +
-      Math.round(be_r1 / CAP_R1 * 100) + '% of Room 1\'s monthly capacity (' + Math.ceil(be_r1).toLocaleString() + ' tickets).';
+      'Room 1 needs ~' + Math.ceil(be).toLocaleString() + ' tickets/month (' +
+      Math.round(be / CAP_R1 * 100) + '% of Room 1 capacity) to reach break-even.';
 
     updateCombinedChart(r1i, r2i, s);
   }
@@ -797,18 +870,15 @@
       : { pos: '#1a7a56', neg: '#c0392b', grid: 'rgba(0,0,0,0.06)',       tick: '#6b6963' };
   }
 
-  function updateR1Chart(i, r) {
-    const labels  = ['10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
+  function updateR1Chart(i, shared_costs) {
     const c = getChartColors();
-    const s = getShared();
-    const shared = s.rent_wk * WPM + s.outgoings_yr / 12 + s.inet + s.labour;
-
     const profits = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1].map(pct => {
-      const a = Math.round(SEATS_R1 * pct);
+      const a  = Math.round(SEATS_R1 * pct);
       const rr = computeR1(Object.assign({}, i, { wkn: a, fri: a, wkd: a }));
-      return Math.round(rr.contribution - shared);
+      return Math.round(rr.contribution - shared_costs);
     });
     const colors = profits.map(p => p >= 0 ? c.pos : c.neg);
+    const labels = ['10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
 
     if (r1Chart) {
       r1Chart.data.datasets[0].data = profits;
@@ -836,17 +906,17 @@
   }
 
   function updateCombinedChart(r1i, r2i, s) {
-    const labels = ['10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
     const c = getChartColors();
     const shared = s.rent_wk * WPM + s.outgoings_yr / 12 + s.inet + s.labour;
     const r2 = computeR2(r2i);
+    const labels = ['10%','20%','30%','40%','50%','60%','70%','80%','90%','100%'];
 
     const profits = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1].map(pct => {
-      const a = Math.round(SEATS_R1 * pct);
+      const a  = Math.round(SEATS_R1 * pct);
       const r1 = computeR1(Object.assign({}, r1i, { wkn: a, fri: a, wkd: a }));
-      const total_costs = shared + r1.rights_cost + r2.overflow_rights;
-      const total_rev   = r1.total_rev + r2.hire_total + r2.hire_bar_net + r2.overflow_tickrev;
-      return Math.round(total_rev - total_costs);
+      const tc = shared + r1.rights_cost + r2.overflow_rights;
+      const tr = r1.total_rev + r2.hire_total + r2.hire_bar_net + r2.overflow_tickrev;
+      return Math.round(tr - tc);
     });
     const colors = profits.map(p => p >= 0 ? c.pos : c.neg);
 
