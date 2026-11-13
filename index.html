@@ -237,7 +237,14 @@
       <div class="field"><label>Internet / misc</label><input type="number" id="inet" value="200" oninput="calcAll()"></div>
       <div class="field"><label>Labour / wages</label><input type="number" id="labour" value="0" oninput="calcAll()"></div>
     </div>
-    <p class="note">Rent and outgoings are shared across both rooms. Film rights and bar stock are modelled per-room below.</p>
+    <div class="field" style="max-width:420px;margin-top:4px">
+      <label>Do your ticket, bar and hire prices include GST?</label>
+      <select id="gst_incl" onchange="calcAll()" style="width:100%;padding:7px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;background:var(--input-bg);color:var(--text)">
+        <option value="incl" selected>Yes, GST is inside the price (normal for shops)</option>
+        <option value="excl">No, I'm not registered for GST / GST is added on top</option>
+      </select>
+    </div>
+    <p class="note">Rent and outgoings are shared across both rooms. Film rights and bar stock are modelled per-room below. Enter rent, outgoings, stock and film rights as amounts excluding GST.</p>
   </div>
 
   <div class="room-tabs" style="margin-top:1.5rem">
@@ -428,7 +435,7 @@
       <div class="grid-2" style="margin-bottom:0">
         <div>
           <div class="section-head" style="margin-top:0">Per month</div>
-          <div class="row-line"><span>Total sales (tickets, bar, hire)</span><span id="bl-sales-mo"></span></div>
+          <div class="row-line"><span>Total sales, excluding GST (tickets, bar, hire)</span><span id="bl-sales-mo"></span></div>
           <div class="row-line"><span>Less bar stock and film rights</span><span id="bl-direct-mo"></span></div>
           <div class="row-line hl"><span>Gross profit</span><span id="bl-gross-mo"></span></div>
           <div class="row-line"><span>Less rent, outgoings, internet, labour</span><span id="bl-overheads-mo"></span></div>
@@ -526,11 +533,11 @@
 
         <hr class="divider">
         <div class="section-head tax">GST (Goods &amp; Services Tax)</div>
-        <div class="row-line"><span>GST on ticket sales (10% collected)</span><span id="t-gst-tickets"></span></div>
-        <div class="row-line"><span>GST on bar / hire revenue (10%)</span><span id="t-gst-bar"></span></div>
-        <div class="row-line"><span>GST on rent &amp; outgoings (input credit)</span><span id="t-gst-rent-credit"></span></div>
+        <div class="row-line"><span>GST collected on tickets and hire fees</span><span id="t-gst-tickets"></span></div>
+        <div class="row-line"><span>GST collected on bar sales</span><span id="t-gst-bar"></span></div>
+        <div class="row-line"><span>GST credits on rent, outgoings, stock and film rights</span><span id="t-gst-rent-credit"></span></div>
         <div class="row-line tax-hl"><span>Estimated net GST payable / quarter</span><span id="t-gst-net"></span></div>
-        <p style="font-size:11px;color:var(--text-dim);margin-top:6px">GST collected on revenue minus GST credits on business expenses. Lodged quarterly via BAS. Once registered for GST your prices are effectively GST-inclusive — the 10% belongs to the ATO, not you.</p>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:6px">GST collected on sales minus GST credits on business expenses, lodged quarterly via BAS. This money is not part of your profit. The sales and profit figures in this calculator already exclude GST, so the amount shown here is a separate cash payment to the ATO. Assumes rent, outgoings, stock and film rights were entered excluding GST.</p>
 
         <hr class="divider">
         <div class="section-head tax">Income tax (profit after expenses)</div>
@@ -596,6 +603,10 @@
 
   function clr(n) { return n >= 0 ? 'positive' : 'negative'; }
 
+  function gstF() {
+    return document.getElementById('gst_incl').value === 'incl' ? 10 / 11 : 1;
+  }
+
   function getShared() {
     return {
       rent_wk:      parseFloat(document.getElementById('rent_wk').value)      || 0,
@@ -640,10 +651,11 @@
     const tf = r1.fri * SESS_FRI * WPM;
     const td = r1.wkd * SESS_WKD * WPM;
     const total_tickets = tw + tf + td;
-    const rw = tw * r1.tp, rf = tf * r1.tp, rd = td * r1.tp;
+    const f = gstF();
+    const rw = tw * r1.tp * f, rf = tf * r1.tp * f, rd = td * r1.tp * f;
     const ticket_rev = rw + rf + rd;
     const bar_buyers = Math.round(total_tickets * r1.barpct);
-    const bar_gross  = bar_buyers * r1.barspend;
+    const bar_gross  = bar_buyers * r1.barspend * f;
     const bar_cogs   = bar_gross  * r1.barcogs;
     const bar_net    = bar_gross  - bar_cogs;
     const total_rev  = ticket_rev + bar_net;
@@ -653,15 +665,16 @@
   }
 
   function computeR2(r2) {
-    const hire_total     = r2.bookings_mo * r2.hirefee;
+    const f = gstF();
+    const hire_total     = r2.bookings_mo * r2.hirefee * f;
     const hire_buyers    = Math.round(r2.bookings_mo * r2.groupsize * r2.barpct);
-    const hire_bar_gross = hire_buyers * r2.barspend;
+    const hire_bar_gross = hire_buyers * r2.barspend * f;
     const hire_bar_cogs  = hire_bar_gross * r2.barcogs;
     const hire_bar_net   = hire_bar_gross - hire_bar_cogs;
     const hire_net_rev   = hire_total + hire_bar_net;
 
     const overflow_tickets = r2.overflow_sess * r2.overflow_occ;
-    const overflow_tickrev = overflow_tickets * r2.overflow_tp;
+    const overflow_tickrev = overflow_tickets * r2.overflow_tp * f;
     const overflow_rights  = r2.rights * r2.numfilms;
     const overflow_net     = overflow_tickrev - overflow_rights;
     const contribution     = hire_net_rev + overflow_net;
@@ -751,7 +764,7 @@
 
     updateR1Chart(i, shared_costs);
 
-    const eff = i.tp + i.barspend * i.barpct * (1 - i.barcogs);
+    const eff = (i.tp + i.barspend * i.barpct * (1 - i.barcogs)) * gstF();
     const be  = (shared_costs + r.rights_cost) / eff;
     document.getElementById('r1-be-line').textContent =
       'Room 1 effective revenue per customer: $' + eff.toFixed(2) +
@@ -849,7 +862,7 @@
     cbNet.className = clr(net_monthly);
     document.getElementById('cb-annual').textContent = fmt(net_annual);
 
-    const eff = r1i.tp + r1i.barspend * r1i.barpct * (1 - r1i.barcogs);
+    const eff = (r1i.tp + r1i.barspend * r1i.barpct * (1 - r1i.barcogs)) * gstF();
     const be  = Math.max(0, total_costs - r2.contribution) / eff;
     document.getElementById('cb-be-costs').textContent         = fmt(total_costs);
     document.getElementById('cb-r2-covers').textContent        = fmt(r2.contribution) + ' (' + Math.round(r2.contribution / total_costs * 100) + '% of costs)';
@@ -868,9 +881,9 @@
     const after_sole    = annual - sole_tax;
 
     // GST estimates (monthly → quarterly x3)
-    const gst_tickets = r1.ticket_rev * 0.10 * 3;
-    const gst_bar     = (r1.bar_gross + r2.hire_bar_gross + r2.overflow_tickrev) * 0.10 * 3;
-    const gst_rent_credit = (s.rent_wk * WPM * 0.10 + s.outgoings_yr / 12 * 0.10) * 3;
+    const gst_tickets = (r1.ticket_rev + r2.hire_total + r2.overflow_tickrev) * 0.10 * 3;
+    const gst_bar     = (r1.bar_gross + r2.hire_bar_gross) * 0.10 * 3;
+    const gst_rent_credit = (s.rent_wk * WPM + s.outgoings_yr / 12 + r1.bar_cogs + r2.hire_bar_cogs + r1.rights_cost + r2.overflow_rights) * 0.10 * 3;
     const gst_net = gst_tickets + gst_bar - gst_rent_credit;
 
     document.getElementById('t-annual-profit').textContent   = fmt(annual);
