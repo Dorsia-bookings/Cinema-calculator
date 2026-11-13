@@ -423,6 +423,37 @@
 
   <!-- COMBINED -->
   <div class="panel" id="panel-combined">
+    <div class="section-label" style="margin-top:1rem">Bottom line</div>
+    <div class="result-card" style="margin-top:0.5rem;margin-bottom:1.5rem">
+      <div class="grid-2" style="margin-bottom:0">
+        <div>
+          <div class="section-head" style="margin-top:0">Per month</div>
+          <div class="row-line"><span>Total sales (tickets, bar, hire)</span><span id="bl-sales-mo"></span></div>
+          <div class="row-line"><span>Less bar stock and film rights</span><span id="bl-direct-mo"></span></div>
+          <div class="row-line hl"><span>Gross profit</span><span id="bl-gross-mo"></span></div>
+          <div class="row-line"><span>Less rent, outgoings, internet, labour</span><span id="bl-overheads-mo"></span></div>
+          <div class="row-line hl"><span>Net profit (before tax)</span><span id="bl-net-mo"></span></div>
+          <div class="row-line"><span>Less income tax (company, 25%)</span><span id="bl-tax-company-mo"></span></div>
+          <div class="row-line hl"><span>Take-home after tax (company)</span><span id="bl-take-company-mo"></span></div>
+          <div class="row-line"><span>Less income tax (sole trader)</span><span id="bl-tax-sole-mo"></span></div>
+          <div class="row-line hl"><span>Take-home after tax (sole trader)</span><span id="bl-take-sole-mo"></span></div>
+        </div>
+        <div>
+          <div class="section-head" style="margin-top:0">Per year (x12)</div>
+          <div class="row-line"><span>Total sales</span><span id="bl-sales-yr"></span></div>
+          <div class="row-line"><span>Less bar stock and film rights</span><span id="bl-direct-yr"></span></div>
+          <div class="row-line hl"><span>Gross profit</span><span id="bl-gross-yr"></span></div>
+          <div class="row-line"><span>Less rent, outgoings, internet, labour</span><span id="bl-overheads-yr"></span></div>
+          <div class="row-line hl"><span>Net profit (before tax)</span><span id="bl-net-yr"></span></div>
+          <div class="row-line"><span>Less income tax (company, 25%)</span><span id="bl-tax-company-yr"></span></div>
+          <div class="row-line hl"><span>Take-home after tax (company)</span><span id="bl-take-company-yr"></span></div>
+          <div class="row-line"><span>Less income tax (sole trader)</span><span id="bl-tax-sole-yr"></span></div>
+          <div class="row-line hl"><span>Take-home after tax (sole trader)</span><span id="bl-take-sole-yr"></span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-dim);margin-top:10px">Gross profit = sales minus the direct cost of what you sell (bar stock and film rights). Net profit = gross profit minus the cost of running the venue. Company take-home is profit left inside the company after tax; paying yourself a wage is taxed separately. Estimates only, check with an accountant.</p>
+    </div>
+
     <div class="section-label" style="margin-top:1rem">Combined monthly P&amp;L</div>
 
     <div class="combined-summary">
@@ -831,7 +862,7 @@
 
     // TAX
     const annual = net_annual;
-    const company_tax = annual * 0.25;
+    const company_tax = Math.max(0, annual * 0.25);
     const sole_tax    = calcSoleTax(annual);
     const after_company = annual - company_tax;
     const after_sole    = annual - sole_tax;
@@ -855,6 +886,37 @@
     document.getElementById('t-after-sole').textContent      = fmt(after_sole);
     document.getElementById('t-monthly-company').textContent = fmt(after_company / 12);
     document.getElementById('t-monthly-sole').textContent    = fmt(after_sole / 12);
+
+    // BOTTOM LINE
+    const sales_mo   = r1.ticket_rev + r1.bar_gross + r2.hire_total + r2.hire_bar_gross + r2.overflow_tickrev;
+    const direct_mo  = r1.bar_cogs + r2.hire_bar_cogs + r1.rights_cost + r2.overflow_rights;
+    const gross_mo   = sales_mo - direct_mo;
+    const overhead_mo = shared_costs;
+    const setBL = (id, v, color) => {
+      const el = document.getElementById(id);
+      el.textContent = fmt(v);
+      if (color) el.className = clr(v);
+    };
+    const neg = v => (v > 0 ? '-' : '') + fmt(v);
+    document.getElementById('bl-sales-mo').textContent     = fmt(sales_mo);
+    document.getElementById('bl-direct-mo').textContent    = neg(direct_mo);
+    setBL('bl-gross-mo', gross_mo, true);
+    document.getElementById('bl-overheads-mo').textContent = neg(overhead_mo);
+    setBL('bl-net-mo', net_monthly, true);
+    document.getElementById('bl-tax-company-mo').textContent = neg(company_tax / 12);
+    setBL('bl-take-company-mo', after_company / 12, true);
+    document.getElementById('bl-tax-sole-mo').textContent    = neg(sole_tax / 12);
+    setBL('bl-take-sole-mo', after_sole / 12, true);
+
+    document.getElementById('bl-sales-yr').textContent     = fmt(sales_mo * 12);
+    document.getElementById('bl-direct-yr').textContent    = neg(direct_mo * 12);
+    setBL('bl-gross-yr', gross_mo * 12, true);
+    document.getElementById('bl-overheads-yr').textContent = neg(overhead_mo * 12);
+    setBL('bl-net-yr', net_annual, true);
+    document.getElementById('bl-tax-company-yr').textContent = neg(company_tax);
+    setBL('bl-take-company-yr', after_company, true);
+    document.getElementById('bl-tax-sole-yr').textContent    = neg(sole_tax);
+    setBL('bl-take-sole-yr', after_sole, true);
 
     document.getElementById('combined-be-line').textContent =
       'Room 2 private hire covers ' + Math.round(r2.contribution / total_costs * 100) + '% of total costs. ' +
