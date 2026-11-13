@@ -238,13 +238,14 @@
       <div class="field"><label>Labour / wages</label><input type="number" id="labour" value="0" oninput="calcAll()"></div>
     </div>
     <div class="field" style="max-width:420px;margin-top:4px">
-      <label>Do your ticket, bar and hire prices include GST?</label>
+      <label>GST situation</label>
       <select id="gst_incl" onchange="calcAll()" style="width:100%;padding:7px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;background:var(--input-bg);color:var(--text)">
-        <option value="incl" selected>Yes, GST is inside the price (normal for shops)</option>
-        <option value="excl">No, I'm not registered for GST / GST is added on top</option>
+        <option value="incl" selected>Registered, GST is inside my prices (normal for shops)</option>
+        <option value="excl">Registered, GST is added on top of my prices</option>
+        <option value="none">Not registered for GST</option>
       </select>
     </div>
-    <p class="note">Rent and outgoings are shared across both rooms. Film rights and bar stock are modelled per-room below. Enter rent, outgoings, stock and film rights as amounts excluding GST.</p>
+    <p class="note">Rent and outgoings are shared across both rooms. Film rights and bar stock are modelled per-room below. If registered, enter rent, outgoings, stock and film rights as amounts excluding GST. If not registered, enter them including any GST you pay, because you can't claim it back.</p>
   </div>
 
   <div class="room-tabs" style="margin-top:1.5rem">
@@ -881,9 +882,11 @@
     const after_sole    = annual - sole_tax;
 
     // GST estimates (monthly → quarterly x3)
-    const gst_tickets = (r1.ticket_rev + r2.hire_total + r2.overflow_tickrev) * 0.10 * 3;
-    const gst_bar     = (r1.bar_gross + r2.hire_bar_gross) * 0.10 * 3;
-    const gst_rent_credit = (s.rent_wk * WPM + s.outgoings_yr / 12 + r1.bar_cogs + r2.hire_bar_cogs + r1.rights_cost + r2.overflow_rights) * 0.10 * 3;
+    const gstOn = document.getElementById('gst_incl').value !== 'none';
+    const gstRate = gstOn ? 0.10 : 0;
+    const gst_tickets = (r1.ticket_rev + r2.hire_total + r2.overflow_tickrev) * gstRate * 3;
+    const gst_bar     = (r1.bar_gross + r2.hire_bar_gross) * gstRate * 3;
+    const gst_rent_credit = (s.rent_wk * WPM + s.outgoings_yr / 12 + r1.bar_cogs + r2.hire_bar_cogs + r1.rights_cost + r2.overflow_rights) * gstRate * 3;
     const gst_net = gst_tickets + gst_bar - gst_rent_credit;
 
     document.getElementById('t-annual-profit').textContent   = fmt(annual);
